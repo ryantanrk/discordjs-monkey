@@ -51,13 +51,12 @@ bot.on('message', async message => {
 
 // Commands
   if (cmd === `help`) {
-    message.react('🐵');
     let helpEmbed = new Discord.RichEmbed()
     .setColor("#795138")
     .setThumbnail(bot.user.displayAvatarURL)
-    .addField("Available Commands", "Visit our website for the list of commands: https://monkey-js-web.glitch.me");
+    .addField("Available Commands", "Visit this website for the list of commands: https://monkeybotjs.glitch.me/cmds.html");
 
-    return message.author.send(helpEmbed);
+    return message.channel.send(helpEmbed);
   }
   else if (cmd === `about`) {
     var uptime = (bot.uptime/1000);
