@@ -15,3 +15,5 @@ urban dictionary?
 add more elements to !about
 
 !serverinfo command
+
+text editor? turn arg into upside down text or bubbled text etc
