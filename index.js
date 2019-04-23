@@ -55,7 +55,7 @@ bot.on('message', async message => {
     let helpEmbed = new Discord.RichEmbed()
     .setColor("#795138")
     .setThumbnail(bot.user.displayAvatarURL)
-    .addField("Available Commands", `${prefix}help` + `\n${prefix}about` + `\n${prefix}ping` + `\n${prefix}avatar` + `\n${prefix}say` + `\n${prefix}monkey` + `\n${prefix}yesno`
+    .addField("Available Commands", "Visit our website for more commands: https://monkey-js-web.glitch.me" + `${prefix}help` + `\n${prefix}about` + `\n${prefix}ping` + `\n${prefix}avatar` + `\n${prefix}say` + `\n${prefix}monkey` + `\n${prefix}yesno`
    + `\n${prefix}count` + `\n${prefix}subcount` + `\n${prefix}subbattle`);
 
     return message.author.send(helpEmbed);
@@ -183,17 +183,23 @@ bot.on('message', async message => {
    }
    else if (cmd === `math`) {
      if (!args.length)
-     return message.channel.send("**USAGE:** " + `${prefix}math` + " <first number> <operand> <second number>");
+     return message.channel.send("**USAGE:** " + `${prefix}math` + " <first number> <operand> <second number>" + "\n(Make sure to add spaces in between)");
      else {
         var operand = args[1];
-        var num1 = args[0];
-        var num2 = args[2];
+        var num1 = parseFloat(args[0]);
+        var num2 = parseFloat(args[2]);
         var result;
         switch (operand) {
           case "+": result = num1 + num2;
-            message.channel.send("The result is " + `${Math.add(num1, num2)}`);
+            message.channel.send("The result is " + `${num1 + num2}`);
             break;
           case "-": result = num1 - num2;
+            message.channel.send("The result is " + `${result}`);
+            break;
+          case "*": result = num1 * num2;
+            message.channel.send("The result is " + `${result}`);
+            break;
+          case "/": result = num1 / num2;
             message.channel.send("The result is " + `${result}`);
             break;
           default: message.channel.send("Invalid operand!");
@@ -201,13 +207,17 @@ bot.on('message', async message => {
       }
     }
   }
-  else if (cmd === `upsidedown`) {
+  else if (cmd === `upsidedown`)
+  {
     if (!args.length)
-      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <arguments>");
-    else {
-      saymessage.replace("a", "ɐ");
-      return message.channel.send(`${saymessage}`);
+      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>");
+    var upsidedown = {
+      a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
+      u:"n", v:"ʌ", w:"ʍ", y:"ʎ" 
     }
+    var upsideresult = saymessage.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
+      return upsidedown[matched]});
+    message.channel.send(upsideresult);
   }
 });
 
