@@ -210,11 +210,13 @@ bot.on('message', async message => {
   else if (cmd === `upsidedown`)
   {
     if (!args.length)
-      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>");
+      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>")
+      saymessage = saymessage.split("").reverse().join("");
     var upsidedown = {
       a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
-      u:"n", v:"ʌ", w:"ʍ", y:"ʎ" 
+      u:"n", v:"ʌ", w:"ʍ", y:"ʎ", '!':"¡", '"':",,", '?':"¿", "'":",", ".":"˙", ",":`'`
     }
+    const symbols = "!|?|.|"|'|,";
     var upsideresult = saymessage.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
       return upsidedown[matched]});
     message.channel.send(upsideresult);
