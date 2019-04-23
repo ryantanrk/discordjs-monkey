@@ -55,8 +55,7 @@ bot.on('message', async message => {
     let helpEmbed = new Discord.RichEmbed()
     .setColor("#795138")
     .setThumbnail(bot.user.displayAvatarURL)
-    .addField("Available Commands", "Visit our website for more commands: https://monkey-js-web.glitch.me" + `${prefix}help` + `\n${prefix}about` + `\n${prefix}ping` + `\n${prefix}avatar` + `\n${prefix}say` + `\n${prefix}monkey` + `\n${prefix}yesno`
-   + `\n${prefix}count` + `\n${prefix}subcount` + `\n${prefix}subbattle`);
+    .addField("Available Commands", "Visit our website for the list of commands: https://monkey-js-web.glitch.me");
 
     return message.author.send(helpEmbed);
   }
@@ -212,14 +211,21 @@ bot.on('message', async message => {
     if (!args.length)
       return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>")
       saymessage = saymessage.split("").reverse().join("");
-    var upsidedown = {
-      a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
-      u:"n", v:"ʌ", w:"ʍ", y:"ʎ", '!':"¡", '"':",,", '?':"¿", "'":",", ".":"˙", ",":`'`
+    
+    var symbolsU = {
+      '!':"¡", '"':",,", '?':"¿", "'":",", '.':"˙", ',':"'", '&':'⅋'
     }
-    const symbols = "!|?|.|"|'|,";
-    var upsideresult = saymessage.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
-      return upsidedown[matched]});
-    message.channel.send(upsideresult);
+    var upsidesymbols = saymessage.replace(/[&!"?'.,]/gi, function(matched){
+      return symbolsU[matched]});
+    
+    var lettersU = {
+      a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
+      u:"n", v:"ʌ", w:"ʍ", y:"ʎ"
+    }    
+    var upsideletters = upsidesymbols.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
+      return lettersU[matched]});
+    
+    message.channel.send(upsideletters);
   }
 });
 
