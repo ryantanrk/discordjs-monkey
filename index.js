@@ -181,7 +181,7 @@ bot.on('message', async message => {
 
      message.channel.send(subBattle);
    }
-   /* else if (cmd === `math`) {
+   else if (cmd === `math`) {
      if (!args.length)
      return message.channel.send("**USAGE:** " + `${prefix}math` + " <first number> <operand> <second number>");
      else {
@@ -200,7 +200,15 @@ bot.on('message', async message => {
             break;
       }
     }
-  } */
+  }
+  else if (cmd === `upsidedown`) {
+    if (!args.length)
+      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <arguments>");
+    else {
+      saymessage.replace("a", "ɐ");
+      return message.channel.send(`${saymessage}`);
+    }
+  }
 });
 
 bot.login(token);
