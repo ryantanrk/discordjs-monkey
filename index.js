@@ -30,9 +30,6 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async message => {
-// Check for prefix at the start of message
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
 // initialize variables
   var args = message.content.slice(prefix.length).split(" ");
   var saymessage = args.slice(1).join(" ");
@@ -47,8 +44,14 @@ bot.on('message', async message => {
   var decision = ["yes", "no", "maybe"];
 
 // Logging
+  if (message.author.bot) return;
+  
+  if (message.content.startsWith(prefix) || message.channel.type === 'dm')
   console.log("[" + message.createdAt + "]" + "[" + message.channel.id + "]" + message.author.tag + ': ' + message.content);
-
+  
+// Check for prefix at the start of message
+  if (!message.content.startsWith(prefix)) return;
+  
 // Commands
   if (cmd === `help`) {
     let helpEmbed = new Discord.RichEmbed()
@@ -208,19 +211,20 @@ bot.on('message', async message => {
   else if (cmd === `upsidedown`)
   {
     if (!args.length)
-      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>");
+      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>")
     saymessage = saymessage.split("").reverse().join("");
     
     var characters = {
       a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
       u:"n", v:"ʌ", w:"ʍ", y:"ʎ", '!':"¡", '"':",,", '?':"¿", "'":",", '.':"˙", ',':"'", '&':'⅋', '`':",", 
+      '9':"6", '7':"ㄥ", '6':"9", '5':"ϛ", '4':"ㄣ", '3':"Ɛ", '2':"ᄅ"
     }    
     var upsidesymbols = saymessage.replace(/[&!"?'.,`]/gi, function(matched){
       return characters[matched]});
-    var upsideletters = upsidesymbols.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
+    var upsideletters = upsidesymbols.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y|2|3|4|5|6|7|9/gi, function(matched){
       return characters[matched]});
     
-    message.channel.send(upsideletters);
+    message.channel.send("```" + upsideletters + "```");
   }
   else if (cmd === `bubble`)
   {
@@ -238,7 +242,7 @@ bot.on('message', async message => {
     var bubbletext = saymessage.replace(/a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|1|2|3|4|5|6|7|8|9/g, 
                                         function(matched){return bubble[matched]});
     
-    message.channel.send(bubbletext);
+    message.channel.send("```" + bubbletext + "```");
   }
 });
 
