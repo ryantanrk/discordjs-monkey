@@ -209,20 +209,16 @@ bot.on('message', async message => {
   {
     if (!args.length)
       return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>")
-      saymessage = saymessage.split("").reverse().join("");
+    saymessage = saymessage.split("").reverse().join("");
     
-    var symbolsU = {
-      '!':"¡", '"':",,", '?':"¿", "'":",", '.':"˙", ',':"'", '&':'⅋'
-    }
-    var upsidesymbols = saymessage.replace(/[&!"?'.,]/gi, function(matched){
-      return symbolsU[matched]});
-    
-    var lettersU = {
+    var characters = {
       a:"ɐ", b:"q", c:"ɔ", d:"p", e:"ǝ", f:"ɟ", g:"ƃ", h:"ɥ", i:"ᴉ", j:"ɾ", k:"ʞ", m:"ɯ", n:"u", p:"d", q:"b", r:"ɹ", t:"ʇ",
-      u:"n", v:"ʌ", w:"ʍ", y:"ʎ"
+      u:"n", v:"ʌ", w:"ʍ", y:"ʎ", '!':"¡", '"':",,", '?':"¿", "'":",", '.':"˙", ',':"'", '&':'⅋', '`':",", 
     }    
+    var upsidesymbols = saymessage.replace(/[&!"?'.,`]/gi, function(matched){
+      return characters[matched]});
     var upsideletters = upsidesymbols.replace(/a|b|c|d|e|f|g|h|i|j|k|m|n|p|q|r|t|u|v|w|y/gi, function(matched){
-      return lettersU[matched]});
+      return characters[matched]});
     
     message.channel.send(upsideletters);
   }
