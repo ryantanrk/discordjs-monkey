@@ -208,7 +208,7 @@ bot.on('message', async message => {
   else if (cmd === `upsidedown`)
   {
     if (!args.length)
-      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>")
+      return message.channel.send("**USAGE:** " + `${prefix}upsidedown` + " <args>");
     saymessage = saymessage.split("").reverse().join("");
     
     var characters = {
@@ -222,6 +222,25 @@ bot.on('message', async message => {
     
     message.channel.send(upsideletters);
   }
+  else if (cmd === `bubble`)
+  {
+    if (!args.length)
+      return message.channel.send("**USAGE:** " + `${prefix}bubble` + " <args>");
+    
+    var bubble = {
+      a:"ⓐ", b:"ⓑ", c:"ⓒ", d:"ⓓ", e:"ⓔ", f:"ⓕ", g:"ⓖ", h:"ⓗ", i:"ⓘ", j:"ⓙ", k:"ⓚ", l:"ⓛ", m:"ⓜ",
+      n:"ⓝ", o:"ⓞ", p:"ⓟ", q:"ⓠ", r:"ⓡ", s:"ⓢ", t:"ⓣ", u:"ⓤ", v:"ⓥ", w:"ⓦ", x:"ⓧ", y:"ⓨ", z:"ⓩ",
+      A:"Ⓐ", B:"Ⓑ", C:"Ⓒ", D:"Ⓓ", E:"Ⓔ", F:"Ⓕ", G:"Ⓖ", H:"Ⓗ", I:"Ⓘ", J:"Ⓙ", K:"Ⓚ", L:"Ⓛ", M:"Ⓜ",
+      N:"Ⓝ", O:"Ⓞ", P:"Ⓟ", Q:"Ⓠ", R:"Ⓡ", S:"Ⓢ", T:"Ⓣ", U:"Ⓤ", V:"Ⓥ", W:"Ⓦ", X:"Ⓧ", Y:"Ⓨ", Z:"Ⓩ",
+      '1':"➀", '2':"➁", '3':"➂", '4':"➃", '5':"➄", '6':"➅", '7':"➆", '8':"➇", '9':"➈"
+    }
+    
+    var bubbletext = saymessage.replace(/a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|1|2|3|4|5|6|7|8|9/g, 
+                                        function(matched){return bubble[matched]});
+    
+    message.channel.send(bubbletext);
+  }
 });
+
 
 bot.login(token);
