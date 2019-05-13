@@ -1,0 +1,22 @@
+{
+  "install": {
+    "include": [
+      "^package\\.json$",
+      "^\\.env$",
+      "^\\.travis.yml$"
+    ]
+  },
+  "restart": {
+    "exclude": [
+      "^public/",
+      "^dist/"
+    ],
+    "include": [
+      "\\.js$",
+      "\\.json",
+      "\\.yml$",
+      "\\.yml"
+    ]
+  },
+  "throttle": 30000
+}

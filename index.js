@@ -5,14 +5,26 @@ var { count } = require("./database.json");
 const superagent = require ("superagent");
 
 const bot = new Discord.Client({disableEveryone: true});
-
-const http = require('http');
 const express = require('express');
 const app = express();
-app.get("/", (request, response) => {
+const http = require('http').Server(app);
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static('public'));  
+var nunjucks = require('nunjucks');
+nunjucks.configure('views', { autoescape: true, express: app });
+
+app.get("/", (request, response) => { // This gets the default url (https://monkey-js.glitch.me)
   console.log(Date.now() + " Ping Received");
-  response.sendStatus(200);
+  response.render('index.html')
 });
+
+app.get("/commands", (request, response) => { // Gets https://monkey-js.glitch.me/commands
+  console.log(Date.now() + " Ping Received");
+  response.render('cmds.html')
+});
+
 app.listen(process.env.PORT);
 setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
@@ -57,7 +69,7 @@ bot.on('message', async message => {
     let helpEmbed = new Discord.RichEmbed()
     .setColor("#795138")
     .setThumbnail(bot.user.displayAvatarURL)
-    .addField("Available Commands", "Visit this website for the list of commands: https://monkeybotjs.glitch.me/cmds.html");
+    .addField("Available Commands", "Visit this website for the list of commands: https://monkey-js.glitch.me/commands");
 
     return message.channel.send(helpEmbed);
   }
@@ -67,10 +79,11 @@ bot.on('message', async message => {
     let about = new Discord.RichEmbed()
     .setColor("#F0FF00")
     .setThumbnail(bot.user.displayAvatarURL)
-    .setTitle("Website")
-    .setURL("https://monkey-js-web.glitch.me/")
     .setFooter(message.createdAt)
-    .addField("About", 'I am a monkey running on discord.js' + '\nMade by Ryan' + '\nBot Uptime (this session): ' + uptime + ' seconds' + '\nHosted on https://glitch.com/');
+    .addField("About", 'I am a monkey running on discord.js' + '\nMade by Ryan <:verified:577498769160142848>' + '\nBot Uptime (this session): ' + uptime + ' seconds' + '\nHosted on [Glitch](https://glitch.com/)'
+            + '\n[My Website!](https://monkey-js.glitch.me/)')
+    .addField("Created Date", "20-4-2019")
+    .addField("Number of Servers", bot.guilds.size);
 
     return message.channel.send(about);
   }
@@ -109,79 +122,86 @@ bot.on('message', async message => {
   else if (cmd === `count`) {
      count++
      return message.channel.send("This command has been done " + count + " time(s)");
-   }
-   else if (cmd === `subcount`) {
-     let edgykids = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCTQeRzZ6WNipajDTT0YI2lw&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let ryan = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCMruWnoMUAx2iay-qjpAWPQ&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let vis = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCQevvBNk_sdBVsvpXbF-j4A&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let sillybunny = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCoI_Yxs0LiNbRUBUg_EIEVA&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let tay = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCMCLKe6dXWbzA0JOFHjufew&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let justname = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCCKGxJRBWA5G3_CBxy9EMMQ&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let tomo = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UC7RmWwr7NZqioHTADipnw1Q&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let bod = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCYYYHRLaPWiKKVGbwRmXMPg&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let farel = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCbOiDYlmXk1d5Jv4BQx_N8w&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let omrooshi = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCivx-96jV0cwV3xBj4EOB3A&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let decode = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCWPlp-o_d_165wFy6oHbvig&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-
+  }
+  else if (cmd === `subcount`) {
+    let edgykids = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCTQeRzZ6WNipajDTT0YI2lw&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let ryan = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCMruWnoMUAx2iay-qjpAWPQ&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let vis = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCQevvBNk_sdBVsvpXbF-j4A&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let sillybunny = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCoI_Yxs0LiNbRUBUg_EIEVA&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let tay = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCMCLKe6dXWbzA0JOFHjufew&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let justname = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCCKGxJRBWA5G3_CBxy9EMMQ&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let tomo = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UC7RmWwr7NZqioHTADipnw1Q&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let bod = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCYYYHRLaPWiKKVGbwRmXMPg&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let farel = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCbOiDYlmXk1d5Jv4BQx_N8w&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let omrooshi = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCivx-96jV0cwV3xBj4EOB3A&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    let decode = await superagent
+    .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=UCWPlp-o_d_165wFy6oHbvig&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+    
      let subEmbed = new Discord.RichEmbed()
-     .setThumbnail("https://yt3.ggpht.com/a-/AAuE7mAdFJWO-YpHaqN_eO7kV3uJ4ATw4-k5-3Mo6g=s88-mo-c-c0xffffffff-rj-k-no")
-     .setColor("#FF0000")
-     .setFooter("As of " + message.createdAt)
-     .addField("Edgy Kids Sub Count",
-     "**Edgy Kids:** " + edgykids.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nRyan: " + ryan.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nVisualError: " + vis.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nSillyBunny: " + sillybunny.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nTayercx: " + tay.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nJustname8 G: " + justname.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nno0b kitten: " + tomo.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\n3bod1000000: " + bod.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nFar3l: " + farel.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nOmrooshi: " + omrooshi.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nDecodxr: " + decode.body.items[0].statistics.subscriberCount + " subscribers"
-     );
-     message.channel.send(subEmbed);
-   }
-   else if (cmd === `subbattle`) {
-     let pdp = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UC-lHJZR3Gqxm24_Vd_AJ5Yw&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-     let tseries = await superagent
-     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCq-Fj5jknLsUf-MWSy4_brA&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
-
+    .setThumbnail("https://yt3.ggpht.com/a-/AAuE7mAdFJWO-YpHaqN_eO7kV3uJ4ATw4-k5-3Mo6g=s88-mo-c-c0xffffffff-rj-k-no")
+    .setColor("#FF0000")
+    .setFooter("As of " + message.createdAt)
+    .addField("Edgy Kids Sub Count",
+    "**" + `${edgykids.body.items[0].snippet.title}` + ":** " + edgykids.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${ryan.body.items[0].snippet.title}` + ": " + ryan.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${vis.body.items[0].snippet.title}` + ": " + vis.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${sillybunny.body.items[0].snippet.title}` + ": " + sillybunny.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${tay.body.items[0].snippet.title}` + ": " + tay.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${justname.body.items[0].snippet.title}` + ": " + justname.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${tomo.body.items[0].snippet.title}` + ": " + tomo.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${bod.body.items[0].snippet.title}` + ": " + bod.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${farel.body.items[0].snippet.title}` + ": " + farel.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${omrooshi.body.items[0].snippet.title}` + ": " + omrooshi.body.items[0].statistics.subscriberCount + " subscribers" +
+    "\n" + `${decode.body.items[0].snippet.title}` + ": " + decode.body.items[0].statistics.subscriberCount + " subscribers"
+    );
+    message.channel.send(subEmbed);
+  }
+  else if (cmd === `subdifference`) {
+    if (!args.length)
+     return message.channel.send("**USAGE:** " + `${prefix}subdifference` + " <channel 1> <channel 2>");
+    else {
+     let c1 = await superagent
+     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=` + `${args[0]}` + `&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+     let c2 = await superagent
+     .get(`https://www.googleapis.com/youtube/v3/channels?part=statistics, snippet&id=` + `${args[1]}` + `&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
+     
+     if (c1.body.pageInfo.totalResults != 1 && c2.body.pageInfo.totalResults != 1)
+       return message.channel.send("Both channels not found! Did you type in the ID correctly?");
+     else if (c1.body.pageInfo.totalResults != 1)
+       return message.channel.send("Channel 1 not found! Did you type in the ID correctly?");
+     else if (c2.body.pageInfo.totalResults != 1)
+       return message.channel.send("Channel 2 not found! Did you type in the ID correctly?");
+       
      var difference;
-     if (pdp.body.items[0].statistics.subscriberCount > tseries.body.items[0].statistics.subscriberCount)
+     if (parseInt(c1.body.items[0].statistics.subscriberCount) > parseInt(c2.body.items[0].statistics.subscriberCount))
      {
-       difference = "PewDiePie is in the lead by " + `${pdp.body.items[0].statistics.subscriberCount - tseries.body.items[0].statistics.subscriberCount}` + " more subscribers";
+       difference = c1.body.items[0].snippet.title + " is in the lead by " + `${c1.body.items[0].statistics.subscriberCount - c2.body.items[0].statistics.subscriberCount}` + " more subscribers";
      }
      else {
-       difference = "T-Series is in the lead by " + `${tseries.body.items[0].statistics.subscriberCount - pdp.body.items[0].statistics.subscriberCount}` + " more subscribers";
+       difference = c2.body.items[0].snippet.title + " is in the lead by " + `${c2.body.items[0].statistics.subscriberCount - c1.body.items[0].statistics.subscriberCount}` + " more subscribers";
      }
 
      let subBattle = new Discord.RichEmbed()
      .setColor("#FF0000")
      .setFooter("As of " + message.createdAt)
-     .setThumbnail("https://i.ytimg.com/vi/Yqz8jHlANW0/maxresdefault.jpg")
-     .addField("🏁**PEWDIEPIE VS T-SERIES**🏁",
-     "PewDiePie: " + pdp.body.items[0].statistics.subscriberCount + " subscribers" +
-     "\nT-Series: " + tseries.body.items[0].statistics.subscriberCount + " subscribers" + "\n" +
+     .addField(`${c1.body.items[0].snippet.title}` + " vs " + `${c2.body.items[0].snippet.title}`,
+     "[" + `${c1.body.items[0].snippet.title}` + "](https://www.youtube.com/channel/" + `${c1.body.items[0].id}` + ")" + ": " + c1.body.items[0].statistics.subscriberCount + " subscribers" +
+     "\n" + "[" + `${c2.body.items[0].snippet.title}` + "](https://www.youtube.com/channel/" + `${c2.body.items[0].id}` + ")" + ": " + c2.body.items[0].statistics.subscriberCount + " subscribers" + "\n" +
      `${difference}`)
-     .addField("**How close to 100M?**",
-     "PewDiePie: " + `${100000000 - pdp.body.items[0].statistics.subscriberCount}` + " subscribers" +
-     "\nT-Series: " + `${100000000 - tseries.body.items[0].statistics.subscriberCount}` + " subscribers");
 
-     message.channel.send(subBattle);
-   }
+     return message.channel.send(subBattle);
+     }
+  }
    else if (cmd === `math`) {
      if (!args.length)
      return message.channel.send("**USAGE:** " + `${prefix}math` + " <first number> <operand> <second number>" + "\n(Make sure to add spaces in between)");
@@ -243,6 +263,24 @@ bot.on('message', async message => {
                                         function(matched){return bubble[matched]});
     
     message.channel.send("```" + bubbletext + "```");
+  }
+  else if (cmd === `server`)
+  {
+    if (message.channel.type === 'dm' || !message.guild.available)
+      return message.channel.send("An error occurred. Either you did this command in the DMs or the server does not allow it.");
+    else
+    {
+      let server = new Discord.RichEmbed()
+      .setTitle(message.guild.name)
+      .setDescription(message.guild.id)
+      .setThumbnail(message.guild.iconURL)
+      .addField("Server Region", message.guild.region)
+      .addField("Member Count", message.guild.memberCount)
+      .addField("Owner", message.guild.owner)
+      .addField("General Channel", message.guild.defaultChannel)
+      .addField("Created", message.guild.createdAt);
+      return message.channel.send(server);
+    }
   }
 });
 
