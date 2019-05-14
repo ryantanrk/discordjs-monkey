@@ -3,6 +3,7 @@ const { Client, Attachment } = require('discord.js');
 const { prefix, token } = require("./botconfig.json");
 var { count } = require("./database.json");
 const superagent = require ("superagent");
+const youtube = require("simple-youtube-api");
 
 const bot = new Discord.Client({disableEveryone: true});
 const express = require('express');
@@ -166,15 +167,15 @@ bot.on('message', async message => {
     );
     message.channel.send(subEmbed);
   }
-  else if (cmd === `searchchannel`) {
+  else if (cmd === `ytchannel`) {
     let result = await superagent
     .get (`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&maxResult=5&q=${args[0]}&key=AIzaSyBWNsnpGwlhVBMAn0_ndT8WmVplYWB4avI`);
     
     let searchResults = new Discord.RichEmbed()
     for (var i = 0; i < 5; i++)
-      searchResults.addField(result.body.items[i].snippet.title, result.body.items[i].snippet.description + `\n[Click Here](https://youtube.com/channel/${result.body.items[i].id.channelId})`);
+      searchResults.addField(`${i+1}. ${result.body.items[i].snippet.title}`, result.body.items[i].snippet.description + `\n[Click Here](https://youtube.com/channel/${result.body.items[i].id.channelId})`);
     
-    return message.channel.send(searchResults);
+    message.channel.send(searchResults);
   }
   else if (cmd === `subdifference`) {
     if (!args.length)
