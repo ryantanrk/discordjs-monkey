@@ -1,8 +1,8 @@
 dependencies:
   body-parser: 1.19.0
-  discord.js: 11.5.0
+  discord.js: 11.5.1
   express: 4.16.4
-  node-fetch: 2.5.0
+  node-fetch: 2.6.0
   nunjucks: 3.2.0
   simple-youtube-api: 5.1.1
   superagent: 5.0.5
@@ -381,7 +381,7 @@ packages:
     dev: false
     resolution:
       integrity: sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
-  /discord.js/11.5.0:
+  /discord.js/11.5.1:
     dependencies:
       long: 4.0.0
       prism-media: 0.0.3
@@ -400,7 +400,7 @@ packages:
       opusscript: ^0.0.6
       sodium: ^2.0.3
     resolution:
-      integrity: sha512-7TAyr2p1ZP9k4gaIhQWOxZpybznT6ND55HbhntUqwQqXkAjIxU3ATbwiOSuCMd4AXz7L9wk1rioRL0sOjXs5CA==
+      integrity: sha512-tGhV5xaZXE3Z+4uXJb3hYM6gQ1NmnSxp9PClcsSAYFVRzH6AJH74040mO3afPDMWEAlj8XsoPXXTJHTxesqcGw==
   /ee-first/1.1.1:
     dev: false
     resolution:
@@ -1050,6 +1050,12 @@ packages:
       node: 4.x || >=6.0.0
     resolution:
       integrity: sha512-YuZKluhWGJwCcUu4RlZstdAxr8bFfOVHakc1mplwHkk8J+tqM1Y5yraYvIUpeX8aY7+crCwiELJq7Vl0o0LWXw==
+  /node-fetch/2.6.0:
+    dev: false
+    engines:
+      node: 4.x || >=6.0.0
+    resolution:
+      integrity: sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
   /normalize-path/2.1.1:
     dependencies:
       remove-trailing-separator: 1.1.0
@@ -1697,9 +1703,9 @@ shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
   body-parser: ^1.19.0
-  discord.js: ^11.5.0
+  discord.js: ^11.5.1
   express: ^4.16.4
-  node-fetch: ^2.5.0
+  node-fetch: ^2.6.0
   nunjucks: ^3.2.0
   simple-youtube-api: ^5.1.1
   superagent: ^5.0.5
